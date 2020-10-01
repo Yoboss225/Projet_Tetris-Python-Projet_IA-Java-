@@ -1,0 +1,92 @@
+
+html
+{
+	background-color: #DCDCDC;
+}
+
+header
+{
+	background-color:#FFEFD5;
+	background-image: url(../images/sol10.jpeg);
+	background-size: 200px;
+}
+
+header a
+{
+	color:white;
+}
+
+header:hover
+{
+	background-image: url(../images/essai.png);
+	transition: 1s;
+}
+
+h1
+{
+	color: white;
+}
+
+h2:hover
+{
+	background-color:#008080 ;
+	transition:  1s steps(3, end);
+}
+
+h3
+{
+	border: double #008080  20px ;
+}
+
+footer
+{
+	background-color: #008080;
+}
+
+video
+{
+	width: 500px;
+	height: 400px;
+	padding: 15px;
+	margin-left: 33%;
+}
+
+/*CLASSES*/
+.presentation img
+{
+	width: 350px;
+	height: 220px;
+	position: relative;
+	transition: 2s;
+}
+
+.presentation
+{
+	display: grid;
+	grid-template-columns:1fr 1fr 1fr 1fr ;
+	padding: 50px;
+}
+
+.presentation img:hover
+{
+	width: 400px;
+	height: 300px;
+	transition: 2s;
+}
+
+.menu h3,.menu a
+{
+	background-color: #008080;
+}
+
+.menu .categorie:hover h3
+{
+	background-color: #008080;
+}
+@media(max-width: 1000px)
+{
+	figure
+	{
+		display: none;
+	}
+}

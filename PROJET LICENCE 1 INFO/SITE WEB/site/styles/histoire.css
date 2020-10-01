@@ -1,0 +1,118 @@
+
+html
+{
+	background-color: #FFEFD5;
+}
+
+header
+{
+	background-color:#FFEFD5;
+}
+
+header a
+{
+	color:#FFEFD5;
+}
+
+
+
+header:hover
+{
+	background-color: grey;
+	transition: 1s;
+}
+p
+{
+	font-style: italic;
+}
+
+h2
+{
+	background-color: grey;
+}
+
+h2:hover
+{
+	background-color:#FFEFD5 ;
+	transition:  1s steps(3, end);
+}
+
+h3
+{
+	border:double 20px black;
+}
+
+/*CLASSES*/
+.menu h3,.menu a
+{
+	background-color: #FFEFD5;
+}
+
+.menu .categorie:hover h3
+{
+	background-color: #FFEFD5;
+}
+
+.exp
+{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+	text-align: center;
+	padding: 50px;
+}
+
+.exp img
+{
+	width: 500px;
+	height: 300px;
+	transition: 3s;
+}
+
+.exp
+{
+	display: grid;
+	grid-template-columns:1fr 1fr 1fr  ;
+}
+
+.exp img
+{
+	width: 300px;
+}
+
+.exp figure
+{
+	background-color: grey;
+}
+
+.exp img:hover
+{
+	width: 350px;
+	transition: 3s;
+	height: 300px;
+	transform: rotate(360deg);
+}
+
+.fonct
+{
+	display: grid;
+	grid-template-columns: 1fr 1fr ;
+	text-align: center;
+	padding: 50px;
+}
+
+.fonct img
+{
+	width: 500px;
+	height: 400px;
+	transition: 3s;
+}
+
+
+@media(max-width: 1000px)
+{
+	figure
+	{
+		display: none;
+	}
+
+}

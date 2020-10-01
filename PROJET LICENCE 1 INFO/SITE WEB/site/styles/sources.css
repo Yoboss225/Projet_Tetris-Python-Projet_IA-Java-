@@ -1,0 +1,28 @@
+
+body
+{
+	background-color: lightblue;
+}
+
+li
+{
+	margin-left: 40%;
+	text-decoration: none;
+}
+
+h3,h2
+{
+	text-decoration: underline;
+}
+
+/*CLASSES*/
+.menu h3,.menu a
+{
+	background-color: lightgreen;
+}
+
+.menu li
+{
+	margin-left: 0;
+}
+

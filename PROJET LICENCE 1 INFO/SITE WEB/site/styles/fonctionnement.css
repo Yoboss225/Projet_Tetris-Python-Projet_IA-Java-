@@ -1,0 +1,58 @@
+
+html
+{
+	background-color:#F5F5F5;
+}
+
+header
+{
+	background-color:#F5F5F5;
+	background-image: url(../images/essai.png);
+	background-size: 200px;
+	color: white;
+	transition: 3s;
+}
+
+header a
+{
+	color:white;
+}
+
+
+
+header:hover
+{
+	background-image: url(../images/sol1.jpeg);
+	transition: linear 3s;
+}
+
+h2:hover
+{
+	background-color:#F5F5F5;
+	transition:  1s steps(3, end);
+}
+
+h3
+{
+	border:double black 20px;
+}
+
+/*CLASSES*/
+.exp
+{
+	width: 500px;
+	height: 400px;
+	padding: 15px;
+	margin-left: 33%;
+}
+
+.menu h3,.menu a
+{
+	background-color:#F5F5F5;
+}
+
+.menu .categorie:hover h3
+{
+	background-color:#F5F5F5;
+}
+

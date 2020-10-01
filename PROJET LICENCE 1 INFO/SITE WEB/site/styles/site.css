@@ -1,0 +1,383 @@
+
+html
+{
+	line-height: 38px;
+	margin: 0;
+	text-align:  justify;
+}
+
+header nav
+{
+	grid-column: 1 / span 2;
+
+}
+
+header
+{
+	display: grid;
+	grid-area: header;
+	width: 100%;
+	word-spacing: 10px;
+	text-align: center;
+	font-size: 15px;
+	font-weight: bold ;
+	font-family:serif;
+	padding: 0;
+	margin: 0;
+
+}
+
+header img
+{
+	float: left;
+	width: 250px;
+	height: 200px;
+	border-radius: 300px;
+}
+
+header nav
+{
+	margin: 0 auto;
+	list-style-type: none;
+	padding: 0;
+}
+
+header  li
+{
+	display: inline-block;
+	height: 100%;
+	margin: 0 10px;
+
+}
+
+header a
+{
+	font-weight: bold;
+	text-decoration: none;
+	
+}
+
+body
+{
+	grid-area: section;
+	margin: 0 20px;
+	font-size: 15px;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-areas: "header""menu""section""footer";
+}
+
+article
+{
+	background-color: white;
+}
+
+a
+{
+	text-decoration: none;
+}
+
+p
+{
+	width: 600px;
+	text-align: justify;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+p:nth-of-type(1):first-letter
+{
+	font-size: 45px;
+	font-style: italic;
+	font-weight: bold;
+}
+
+footer
+{
+	grid-area: footer;
+	height: 90px;
+	width: 100%;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	margin: 0;
+	font-size: 10pt;
+	line-height: 1;
+	height: 100%;
+	padding-top: 15px;
+}
+
+footer a
+{
+	color: white;
+}
+
+footer a:hover
+{
+	color: orange;
+}
+
+footer
+{
+	grid-area: footer;
+	height: 90px;
+	width: 100%;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	margin: 0;
+	font-size: 10pt;
+	line-height: 1;
+	padding-top: 15px;
+}
+
+footer a
+{
+	color: white;
+}
+
+footer a:hover
+{
+	color: orange;
+}
+
+section
+{
+	background-color: white;
+}
+
+/*TITRES*/
+h1
+{
+	font-size: 60px;
+	font-family: New Century Schoolbook;
+	height: 250px;
+	line-height: 60px;
+	text-align: center;
+	margin: 0 auto;
+	width: 100%;
+	font-weight: bold;
+	transition: 3s  steps(6, end);
+}
+
+h1:hover
+{
+	transition: 2s;
+}
+
+h2:hover
+{
+	background-color:#FFEFD5 ;
+	transition:  1s steps(3, end);
+}
+
+h2
+{
+	font-weight: bold;
+	font-size: 26pt;
+	color: black;
+	font-family: serif;
+	transition: 2s;
+	text-align: center;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-left: 32%;
+	margin-right: 37%;
+}
+
+h2:nth-of-type(even)
+{
+	margin-right: 53%;
+	margin-left: 64px;
+}
+
+h3
+{
+	margin: 0;
+	font-size: 30px;
+	color: black;
+	padding: 15px;
+	text-align: center;
+}
+
+h3
+{
+	border-width: 20px 20px 20px 20px;
+	margin-left: 35%;
+	margin-right: 35%;
+}
+
+h4
+{
+	text-decoration: underline;
+	margin-left: 44%;
+}
+
+h5
+{
+	display: none;
+}
+
+/*CLASSES*/
+.cl
+{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	text-align: center;
+	padding: 50px;
+}
+
+.cl img
+{
+	width: 400px;
+	height: 200px;
+	transition: 3s;
+}
+
+.cl
+{
+	display: grid;
+	grid-template-columns:1fr 1fr 1fr  ;
+}
+
+.cl img
+{
+	width: 300px;
+}
+
+.cl img:hover
+{
+	width: 350px;
+	transition: 3s;
+	height: 300px;
+}
+
+.menu
+{
+	text-align: center;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	
+}
+
+.menu .categorie
+{
+	background: white;
+	position: relative;
+	/* pour être la «racine» du sous-menu en absolute */
+}
+
+.menu .categorie ul
+{
+	max-height: 0;
+	overflow: hidden;
+	transition: 2s;
+	position: absolute;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	width: 100%;
+	/* pour avoir la même largeur que la «racine» */
+}
+
+.menu .categorie:hover ul
+{
+	max-height: 50em;
+	transition: 1s;
+}
+
+.menu h3,.menu a
+{
+	display: block;
+	margin: 0;
+	padding: .5em 1.5em;
+	font-size: inherit;
+	color: black;
+	text-decoration: none;
+	box-sizing: border-box;
+}
+
+.menu .categorie:hover h3
+{
+	color: white;
+}
+
+.menu a:hover
+{
+	color: white;
+	background-color: grey;
+}
+
+/*ADAPTATIVITE*/
+@media(max-width: 1000px)
+{
+	html
+	{
+		line-height: 25px;
+	}
+
+	figcaption,header figure 
+	{
+		display: none;
+	}
+
+	header ul
+	{
+		width: 800px;
+	}
+	p
+	{
+		padding: 0;
+	}
+
+	h2
+	{
+		
+		margin-right: auto;
+		margin-left:  auto;
+	}
+
+	img
+	{
+		width:400px;
+		height: 300px;
+		
+		display: block;
+		margin-right: 48%;
+		 
+
+	}
+
+	header
+	{
+		width: auto;
+
+	}
+	header h1
+	{
+		width: 1vw;
+		height: 1vh;
+	}
+	
+
+	h2,h3
+	{
+		font-size: 20px;
+	}
+
+	.cl,header h1,h4
+	{
+		display: none;
+	}
+
+	.categorie
+	{	
+		padding: 0;
+		
+	}
+
+	footer
+	{
+		display: none;
+	}
+}

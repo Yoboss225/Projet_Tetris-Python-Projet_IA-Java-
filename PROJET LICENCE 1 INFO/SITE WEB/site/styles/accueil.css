@@ -1,0 +1,60 @@
+
+html
+{
+	background-color: grey;
+}
+
+header
+{
+	background-color:#FFE4E1;
+}
+
+header a
+{
+	color:black;
+}
+
+
+
+header:hover
+{	background-color: lightgrey;
+	background-color: grey;
+	transition: 1s;
+}
+
+h2
+{
+	background-color: grey;
+}
+
+h2:hover
+{
+	background-color:lightgrey ;
+	transition:  1s steps(3, end);
+}
+
+h3
+{
+	border:double 20px grey;
+}
+footer
+{
+	height: auto;
+	text-align: justify;
+}
+
+/*CLASSES*/
+.menu h3,.menu a
+{
+	background-color: #FFE4E1;
+}
+
+.menu .categorie:hover h3
+{
+	background-color: lightgrey;
+}
+
+
+
+
+
