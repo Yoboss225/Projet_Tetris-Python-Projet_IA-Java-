@@ -1,0 +1,475 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}      % caractères français
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}  % langue
+\usepackage{graphicx}         % images
+\usepackage{verbatim}         % texte préformaté
+\usepackage{amsfonts}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{pifont}
+\usepackage{soul}
+\usepackage{multirow,multicol}
+\usepackage{amsmath, amssymb, latexsym}
+\usepackage{pstricks,pst-node,pst-coil,pst-grad,pst-plot}
+\usepackage{epsfig,subfigure}
+\usepackage{listings}
+\usepackage{enumitem}
+\frenchbsetup{StandardLists=true}
+\usepackage{caption}
+%\usepackage{subcaption}
+\usepackage{hyperref}
+
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\newcommand{\hsp}{\hspace{20pt}}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+
+
+\begin{document}
+\begin{titlepage}
+  \begin{sffamily}
+  \begin{center}
+
+    \includegraphics[width = 4cm]{images/UNICAEN-logo-NOIR-horizontal.png}~\\[1.5cm]
+
+    \textsc{\LARGE Université de Caen Normandie}\\[2cm]
+
+    \textsc{\Large Rapport du projet de Conception Logiciel \\ Groupe 1A \\ Licence Informatique}\\[1.5cm]
+
+    % Title
+    \HRule \\[0.4cm]
+    { \huge \bfseries Développement d'un Tetris multijoueur\\[0.4cm] }
+
+    \HRule \\[2cm]
+    \includegraphics[width = 6cm]{images/tetris_300x300-293927.jpg}
+    \\[2cm]
+
+    % Author and supervisor
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushleft} \large
+        Brandon \textsc{Vouvou}\\
+        Miezan \textsc{Kablan}\\
+        Deborah \textsc{Kasenga}\\
+        Suzana \textsc{Dedefa}
+        
+      \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushright} \large
+        \emph{Tuteur :} Françoise \textsc{Lambert}\\
+        \emph{Examinateur : } Sophie \textsc{Schupp-Philips}
+      \end{flushright}
+    \end{minipage}
+
+
+  \end{center}
+  \end{sffamily}
+\end{titlepage}
+
+
+\lstset{language=Python,numbers=left,numberstyle=\small}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+Au cours de ce second semestre de notre première année licence informatique, il était question pour nous de réaliser un projet dans le cadre du cours de Conception de logiciel. Le but de ce projet est de concevoir un jeu de bout en bout en langage python. Sur une liste de huit projets, nous avons choisis de travailler sur le jeu de Tetris que l’on pouvait réaliser avec le bibliothèque Pygame ou Tkinter. 
+Une fois que notre choix a été fait, nous nous sommes documentés sur ce jeu afin de comprendre entièrement ses règles. Ensuite nous avons fait le choix de la bibliothèque avec laquelle nous voulions concevoir le jeu ; afin de pouvoir réaliser notre projet, nous avons fait le choix d'utiliser la bibliothèque \hl{Pygame}. Et pour finir, nous avons établi sur papier un plan de travail avant d’aborder directement le codage en python.
+
+
+\section{OBJECTIFS DU PROJET}
+	\subsection{But du projet}
+Le but de ce projet est de réaliser une version multijoueur du célèbre jeu de Tetris. Dans celle-ci plusieurs joueurs s’affrontent, chacun ayant son propre champ de jeu, et réaliser des lignes. La première étape du projet étant d’implémenter le jeu avec une  interface graphique  et quelques  améliorations classiques comme {\color{blue}niveau de difficulté progressif}, {\color{blue}visualisation de la pièce suivante}. Et dans un second temps, il s’agissait d’implémenter un mode multijoueur local contre une IA ou un autre joueur sur écran partagé.
+
+	\subsection{Présentation du jeu}
+Le jeu du Tetris est un jeu dans lequel des pièces de différentes formes et couleurs descendent dans le puit qui est considéré comme espace de jeu ou la grille. Ainsi lors de la chute des pièces le joueur ne peut pas ralentir leurs descentes, mais peut les accélérer et peut choisir la position dans laquelle il souhaite placer la pièce dans la grille, ce qui équivaut à effectuer des rotations sur la pièce. Lorsqu'une ligne est complète c'est-à-dire lorsque toutes les cases à l'horizontal de la grille de jeu sont pleines, celles-ci disparaissent et les blocs supérieurs tombent. Si le joueur ne parvient pas à faire disparaître les lignes et que les pièces s'empilent jusqu'en haut de la grille, la partie se termine.
+
+		\subsubsection{Le plateau}
+Le plateau de jeu est souvent appelé "puit" ou "matrice". Il s'agit de l'espace dans lequel tombent les pièces. Il dispose toujours d'une grille en arrière-plan, visible ou non, dont les cases sont de la même grandeur que les carrés des pièces, et que celles-ci suivent dans leur chute. Il est également entouré par une armature appelée "tétrion", infranchissable, qui pose les limites du champs de jeu.
+
+		\subsubsection{Principe du jeu}
+Des formes géométriques, tombent depuis le haut de la grille. Elles peuvent prendre plusieurs formes pour certaines, et la rotation peut être faite à l'aide d'une touche quelconque du clavier selon la configuration effectuée. Le joueur doit ainsi placer les pièces dans la grille de jeu dans le but de remplir des lignes. Les pièces tombent une par une, et fusionnent avec le reste des pièces déjà tombées une fois parvenues au bas de la grille. 
+Le principe général du jeu de Tetris consiste à effacer des lignes en remplissant les cases horizontales de la grille de jeu avec les différentes pièces qui tombent lors du jeu.
+
+		\subsubsection{Les pièces}
+Les pièces encore appelées les tétriminos, sont au nombre de 7 à savoir : \\
+\includegraphics[width=16cm]{images/tetriminos.png}
+
+		\subsubsection{Les Couleurs}
+Les couleurs sont choisies aléatoirement de même que les pièces. Les différentes couleurs utilisées dans notre jeu sont le bleu, le vert, l'orange, le jaune, le rouge, le mauve, le bleu clair, le vert clair, l'orange clair, le jaune clair, le rouge clair, le mauve clair.
+
+		\subsubsection{Les mouvements latéraux}
+Le joueur à l'aide de certaines touches (selon la configuration) déplace latéralement les pièces, c'est-à-dire vers la droite ou vers le gauche. Cependant quand la pièce touche les bords du jeu, le déplacement n'est plus possible.
+
+		\subsubsection{Les rotations}
+Le joueur peut faire tourner plusieurs fois à gauche et/ou à droite, de 90{\degres} n'importe quel bloc pour le déposer de la façon désirée pendant que le bloc descend.
+
+		\subsubsection{Le fonctionnement du jeu}
+Les pièces générées se déplacent puis se fixent dans notre grille.  C'est une grille de 22 x 12 petits carrés. Initialement notre grille est uniquement composée de la chaîne de caractère \emph{"."}  contenue dans la variable \emph{"VIDE"}.
+La taille de chaque petit carré est de 25. 
+La vitesse de la chute des pièces varient selon le niveau atteint par le joueur. Plus le niveau est élevé, plus la vitesse augmente. Le joueur continue à placer ses pièces qui elles, tombent aléatoirement, jusqu'à ce qu'il réalise (forme) une ligne pleine qui sera effacée et fera évoluer son score. Lorsqu'une pièce est placée, une nouvelle est générée, c'est celle qui est annoncée. Si une pièce touche le sommet de la grille, par empilement, la partie s’arrête. 
+		
+		\subsubsection*{Travail attendu}
+Pour pouvoir concevoir le jeu qui a été expliquer ci-dessus, nous avons plusieurs étapes à réaliser dans notre travail, la première est d’implémenter le jeu avec une interface graphique, en ajoutant un niveau de difficulté, progressif. Ensuite nous  allons améliorer  notre jeu en l'adaptant pour un multijoueur. Nous avons besoin d’un quadrillage que l’on peut considérer comme notre terrain de jeu, qui sera donc dimensionné, afin de pouvoir l’afficher à l’écran. Sur ce quadrillage nous allons appliquer quelques propriétés comme l'ajout d’une manière aléatoire des pièces dans la grille, vérifier les lignes complètes et enfin effacer les lignes complètes. Il faudra tout de même ajouter des améliorations : Visualisation de la pièce suivante, déplacement des pièces, effectuer des rotations sur les pièces si possible. 
+Une fois toutes ses parties terminées, nous allons devoir l’appliquer à un jeu de multijoueur. Celui-ci demande de posséder deux grilles, une pour chaque joueur. Chacun ayant le contrôle sur sa grille de jeu à l'aide des touches du même clavier, configuré différemment.
+Pour concevoir ce jeu, nous avons choisi Pygame car on s'était plus documenter sur cette bibliothèque. 
+
+
+
+\section{FONCTIONNALITÉS IMPLÉMENTÉES \& ALGORITHMES}
+	\subsection{DESCRIPTION DES FONCTIONNALITÉS}
+		\subsubsection{Phases d'analyse et de conception}
+La première phase a été de déterminer quelles allaient être les fonctions fondamentales dont nous aurions besoin dans notre programme. Aussi nous avons commencé par écrire les mots clefs du jeu tels que :
+	\begin{itemize}
+      \item Game over
+      \item Gestion du clavier
+      \item Affichage
+      \item Effacer une ligne complète
+      \item Dessiner une pièce
+      \item Rotation d'une pièce
+      \item Déplacer une pièce
+      \item Supprimer une ligne
+      \item Générer une ligne
+      \item Score
+      \item Plateau
+	\end{itemize}	
+La seconde consistait à la rédaction du programme principale, c'est-à-dire l’enchaînement des fonctions qui allaient constituer les différentes étapes du programme. Et la troisième étape fut de choisir le codage des données: la grille et les pièces.	
+\begin{center}
+	\begin{figure}
+		\includegraphics[width=10cm]{images/formes_pieces.png}
+		\caption{Différentes pièces du Tetris et leur configuration}
+	\end{figure}
+\end{center}
+Nous remarquons que chaque pièce est constituée de 4 cases et qu'une case repère qui permet de localiser la pièce et de gérer le déplacement de celle-ci.
+\begin{itemize}
+	\item La  grille  définit  l’espace  où  évoluent  les  pièces. Elle  doit  représenter  la  taille de l’espace d’évolution des pièces plus les contours pour pouvoir délimiter cet espace.  Ceci  nous  amène  à  une  grille  de  taille  12X22.
+	
+	\item L'interface et les touches directionnelles font aussi parti de nos choix : nous avons tout simplement choisi d'utiliser les touches directionnelles et la touche Ctrl pour faciliter l'utilisation du jeu, notamment pour déplacer les pièces dans le mode Solo.
+\end{itemize}
+
+	\subsection{Description de la classe GRILLE}
+\textbf{\underline{Généralité :}} 
+{\color{blue}Dans cette classe, on commence par initialiser notre grille de jeu, et à implémenter  les fonctions permettant d'ajouter les différentes pièces dans la grille, de vérifier la présence ou non des éléments sur les lignes et colonnes de la grille, d'effacer les lignes complètes c'est-à-dire les lignes où chaque case contient un élément, et aussi de dessiner nos tétriminos dans la grille de jeu.} \\ \\
+%Définition des variables globales (taille de la fenêtre nombres de lignes nombres de colonnes taille de la grille définition de la variable vide) définition des couleurs à l’aide des canaux RGB et créations de tuples contenant ces couleurs), création des différentes formes de pièces du jeu et aussi des lignes incomplètes 
+Initialisation de la grille on multiplie la variable vide par le nombre de lignes en fonction du nombre de colonnes : cette variable vide correspondant aux blancs dans la grille finale c'est-à-dire les lieux où il n’y a pas de pièces.
+
+		\subsubsection{Ajout de pièces dans la Grille}
+\begin{lstlisting}[frame=single] 
+def AjoutELEMENT(self, piece): 
+  FORME = PIECES[piece.getFORMEIndex()][piece.getPieceSuivante()] 
+  L1 = len(FORME)
+  L2 = len(FORME[0])
+        
+  for y in range(LONGUEUR):
+      for x in range(LARGEUR):
+         if FORME[y][x] != VIDE:
+             self.m_grille[y + int(piece.getPosY() / TAILLE_BOITE)][
+      x + int(piece.getPosX() / TAILLE_BOITE)] = piece.getColor()
+\end{lstlisting}
+
+Ici la variable forme prend en compte deux éléments c'est-à-dire: la pièce suivante et la pièce tombante. \\ On donne comme valeur aux variables : L1 le premier élément de la liste forme c'est-à-dire l’index des pièces et L2 le nombre d’items que contient la variable forme ensuite on crée une double boucle dans laquelle on vérifie si la grille n’est pas vide elle contient des 0 alors on remplace ces 0 tout en prenant compte la taille de la boîte, la position en x et en y des pièces et on lui attribue une couleur de façon aléatoire tout ceci à l’aide des fonctions utilisées dans la prochaine classe {\color{green}PIECES} tel que (getposx, getcolorx, getposy)cette fonction ajoute juste les pièces a la grille.  Mais la fonction qui dessine les pièces lorsqu’elle ne sont plus en chute et qu’elles sont posées dans la grille se nomme {\color{orange}dessinergrille} ,fonction qui sera expliquée par la suite.
+
+			\subsubsection{Vérification d'une ligne complète :}
+Cette fonction est destinée à faire un test ou plutôt a vérifier si la grille contient ou non des éléments dans les différentes lignes et colonnes de la grille. C'est une fonction qui sera utilisée par la suite dans la fonction {\color{orange}effacelignecomplete} afin de pouvoir effacer les lignes totalement pleine de notre grille de jeu. \\ On signifie ici que la fonction {\color{orange}lignecomplete} est complémentaire à la fonction {\color{orange}effacelignecomplete} dans la mesure où c’est elle qui nous permet de vérifier les lignes complètes afin de pouvoir les effacer 
+
+			\subsubsection{Suppression des lignes complètes}
+\begin{lstlisting}[frame=single] 
+def effaceLigneComplete(self):
+    y = COLONNES - 1
+    nombreLignecomplete = 0
+
+    while y >= 0:  
+       if self.lignecomplete(y):
+            nombreLignecomplete += 1
+
+         for DansY in range(y, 0, -1):
+             for x in range(LIGNES):
+               self.m_grille[DansY][x] = self.m_grille[DansY - 1][x]
+         for x in range(LIGNES):
+                self.m_grille[0][x] = VIDE
+       else:
+           y -= 1
+
+    return nombreLignecomplete
+\end{lstlisting} 
+
+Dans cette fonction on fait des tests. On initialise y égal à la longueur de la grille (-1) (donc 21 lignes) et le nombre de ligne complète à 0. On teste si le nombre de colonnes de la grille est supérieur ou égale à 0, puis on observe pour chaque colonne si elle contient ou pas des éléments. Si oui, une ligne complète s'ajoute. On parcourt le nombre de colonnes à l'aide d’une boucle {\color{red}for} allant de la dernière colonne à la première en décrémentant de -1, puis on parcourt aussi le nombre de lignes.\\ Pour une ligne complète de la grille, les pièces des lignes en fonction des colonnes sont éliminées et remplacées par la variable VIDE; sinon si une ligne est déjà jouée c'est-à-dire si elle n'est pas entièrement pleine ou complète, on réduit de -1 le nombre de lignes restantes dans la grille de jeu.\\ Après cela la il y aura une fonction {\color{orange}get()} qui retournera uniquement les éléments x et y de la grille. En bref, une fois que la condition de la fonction {\color{orange}lignecomplete()} est vérifiée, on ajoute une ligne au premier rang et on supprime la ligne complète.
+
+			\subsubsection{Affichage de la pièce dans la grille}
+C'est la dernière fonction de la classe grille, elle prend en paramètre une surface que l’on a appelé screen. Cette fonction a pour but de dessiner les pièces dans la grille en fonction du nombre des colonnes et des lignes tout d’abord on vérifie si elles sont vides si ce n’est pas le cas alors elle contient des 0 étant donné que les pièces sont constituées de 0 ainsi que de la chaîne de caractère VIDE qui constitue notre grille. Ainsi une fois que les zéros constituant nos pièces sont placés dans la grille de jeu, on les dessine sur une surface à l’aide de la fonction pygame.draw.rect qui va pixéliser nos zéros en des petits cubes constituants les parties des pièces.
+
+	\subsection{Description de la classe Piece}
+\textbf{\underline{Généralité :}} {\color{blue}Dans cette classe on gère le comportement de la pièce dans la grille de jeu comme sa position lors de sa chute dans la grille, qui a été centrée; on vérifie la possibilité de la descente de la pièce dans la grille, on permet à la pièce de bouger et d'effectuer des rotations au niveau de la grille. La pièce suivante est aussi dessinée dans cette classe}. \\ \\
+
+On initialise les variables qui seront utilisées dans la classe on a :
+\begin{itemize}
+	\item forme index qui représente les pièces utilisées dans le jeu on utilise la méthode random,choice pour choisir parmi les pièces initialisées en variable globale 
+	
+	\item position qui représente ici la position de l’affichage de la pièce suivante dans la fenêtre
+	
+	\item couleur qui représente ici les différentes couleurs de pièces
+	
+	\item pièce{\_}suivante on sélectionne aléatoirement les pièces entre 0 et l’index des des formes dans la listes des FORMES
+	
+	\item et enfin forme longueur{\_}pièce et largeur pièce;
+\end{itemize}
+
+Quatre fonctions majeures composent la classe : la fonction {\color{orange}bouger} ,la fonction {\color{orange}rotation}, la fonction {\color{orange}descenteValide} et la fonction {\color{orange}dessinerpieces}. Les autres fonctions retourne uniquement certaines variables qu’on utilisera souvent dans d’autres classes.
+
+			\subsubsection{Descente des pièces dans la grille}
+Cette fonction permet la descente de la pièce dans la grille; ici on vérifie tout d’abord si la descende de la pièce est possible et cela par le biais de la fonction {\color{orange}descenteValide} puis a chaque fois on rajoute \emph{x} ou \emph{y} à ses coordonnées du moment où la descente n’est plus valide où que la pièce touche le fond de la grille ou quand elle rencontre une autre pièce on retourne {\color{purple}False}. Lors de la conception de notre jeu nous n’avons pas pensé à cette fonction lors de la phase des test nous nous sommes aperçus que les pièces restait tout en haut de la grille mais ne descendait pas, c'est par l’aide de madame Françoise Lambert, qui nous a suggéré de créer une fonction {\color{orange}bouger}, qu'on a pu faire bouger nos pièces. Il est aussi important de noter que cette fonction n'est active que si et seulement si la descente des pièces dans la grille est possible.
+\begin{lstlisting}[frame=single] 
+def bouger(self, x, y, GRILLE):
+        if self.descenteValide(x, y, GRILLE):
+            self.m_position['x'] += x
+            self.m_position['y'] += y
+            return True
+
+        else:
+            return False
+\end{lstlisting}
+
+			\subsubsection{Validité de la descente d'une pièce}
+Ici tout d’abord à l’aide, on vérifie la possibilité qu'une pièce ou que les futures pièces puisse bouger dans la grille. Dans cette double boucle parcourant les lignes et les colonnes de notre grille, on vérifie que notre pièce, essentiellement formée de la chaîne de caractère \emph{VIDE} et de zéros, rencontre cette même chaîne dans la grille de jeu afin de continuer jusqu'à la prochaine itération. Une fois que notre pièce croise la chaine de caractère \emph{VIDE} dans la grille, à ses coordonnées \emph{x} et \emph{y} sont ajoutées des valeurs qui effectuerons pour ne pas dire qui mettrons à jour le mouvement de descente de la pièce au milieu de notre grille.
+\begin{lstlisting}[frame=single] 
+for y in range(self.LONGUEURPIECE):
+   for x in range(self.m_LARGEURPIECE):
+      if self.m_FORME[y][x] == VIDE:
+         continue
+
+      xPos = x + int((self.m_position['x'] + ajoutX) / TAILLE_BOITE)
+      yPos = y + int((self.m_position['y'] + ajoutY) / TAILLE_BOITE)
+\end{lstlisting} 
+
+Après cette première itération on passe à la suivante qui est de voir, de vérifier si les coordonnées x de la pièce sont supérieures à zéro, ou supérieures/égales à celles des lignes ou encore si les coordonnées y de la pièce sont supérieures/égales à celles des colonnes; si tel est le cas on retourne {\color{purple}False}. De même on test aussi si les lignes et les colonnes ne contiennent pas la chaîne de caractère \emph{VIDE} où plutôt si les parties de la grille sont occupées par d’autres pièces, on retourne aussi {\color{purple}False}. Et lorsque notre test de boucle vérifie toutes ces conditions on retourne {\color{purple}True}.
+\begin{lstlisting}[frame=single] 
+if xPos < 0 or xPos >= LIGNES or yPos >= COLONNES:
+                    return False
+                if GRILLE.get(xPos, yPos) != VIDE:
+                    return False
+\end{lstlisting} 
+Ce test a été réalisé afin de s'assurer que notre pièce ne sort pas des limites de notre grille de jeu.
+
+
+			\subsubsection{Rotation d'une pièce}
+Pour la rotation des différentes pièces, on vérifie tout d'abord si la place qu'occupe la pièce en fonction de sa rotation ne dépasse pas la largeur de la grille, et si ce n’est pas le cas on la pièce reste comme elle est donc on réaffecte aux variables les mêmes valeurs de façon a ce qu’elle restent dans la même position.
+
+			\subsubsection{Affichage de la pièce suivante}
+Tout simplement cette fonction a pour but de dessiner les pièces en pleine chute dans la grille à l’aide de la méthode {\color{brown}pygame.draw.rect}. Elle est complémentaire à la fonction {\color{orange}dessinergrille()} car elle permet de dessiner les pièces posées dans la grille.
+
+	\subsection{Description de la classe Solo}
+\textbf{\underline{Généralité :}} 
+{\color{blue}Dans cette classe se trouve les fonctions essentielles pour le lancement de notre jeu; en effet c'est dans cette classe que la fenêtre de jeu est initialisée, que les mouvements des pièces à gauche et à droite dans la grille sont assurés, que les fonctions d'affichage de texte, que les touches de jeu ont été configurées, les niveaux ont été implémentées}. \\ \\
+
+Dans cette classe on se sert des autres classes et de leurs attributs afin de faire tourner le jeu. Ainsi les fondamentaux de cette classe sont: les \emph{mouvements des pièces}, la \emph{fréquence de mise à jour} de la grille et bien sûr des \emph{événements associés aux pièces} dans la grille. Dans cette classe, nous travaillons aussi sur l’aspect graphique, en dessinant  tous les éléments du jeu aux endroits destinés. Elle ne comprend que 3  principales fonctions : {\color{orange}entreeDonnees} ; {\color{orange}logic} et {\color{orange}MiseaJour}; les autres fonctions telles que {\color{orange}dessinelements}, {\color{orange}texte} et {\color{orange}afficheScore} concernent uniquement la partie graphique puis d’autres fonctions concernant les niveaux et changements d’ambiance au cours du jeu. \\
+
+%Après avoir initialisé les différentes variables utilisées, nous commençons par créer la fonction logic.
+
+			\subsubsection{Déplacement des pièces}
+C'est la dans fonction {\color{orange}logic} , qu'on a définit les différentes directions par rapport à la boîte par exemple si le joueur appuie la touche dédié a la direction gauche la pièce se déplace vers la gauche dans la grille et ça en est de même chose lorsque les touches dédiées aux directions haut et bas sont pressées. Pour faire cela nous avons initialisé un dictionnaire direction en début de la classe où nous donnons comme clé les directions et comme valeur, la valeur booléenne false.  Self m{\_}direction = {'left' : False, "right" : False, "down" : False} ensuite on régule le temps entre  l’exécution des  instructions de  mouvement des pièces et le déplacement des pièces . 
+\begin{lstlisting}[frame=single] 
+if time.time() - self.m_DernierTempsMOuv > 0.1:
+    if self.m_direction['left'] == True:
+       self.m_PieceCourante.bouger(-TAILLE_BOITE, 0, self.m_GRILLE)
+\end{lstlisting} 
+
+Ici on vérifie d'abord si le temps entre ces deux événements est supérieur à 0,1 ce qui aura pour effet le fait qu'il y ait à chaque fois un temps de latence entre deux instructions, sinon lorsque le joueur appuiera sur une touche le mouvement de la pièce sera continuel ce qui ne favorise pas les bonnes conditions de jeu . Puis on affecte en fonction des directions, la direction de la pièce en fonction dans la grille.
+\begin{lstlisting}[frame=single] 
+elif self.m_direction['right'] == True:
+	self.m_PieceCourante.bouger(TAILLE_BOITE, 0, self.m_GRILLE)
+\end{lstlisting} 
+
+La clé \emph{right} était au départ initialisée à False, et quand le joueur appuie sur la touche correspondant à la direction droite la pièce présente dans la grille (self, m{\_}PieceCourante) se déplace  vers la droite de la grille a l’aide de la fonction {\color{orange}bouger} présente dans la classe pièce qui permet aux pièces de se déplacer dans la grille
+\begin{lstlisting}[frame=single]
+if self.descenteValide(x, y, GRILLE):
+            self.m_position['x'] += x
+            self.m_position['y'] += y
+            return True
+
+        else:
+            return False
+\end{lstlisting}
+
+Les deux arguments de la fonctions \emph{x} et \emph{y} de la fonction {\color{orange}bouger} correspondent aux coordonnées ajoutées en x et en y . Sachant que la variable taille{\_}boite correspond ici a la taille de chaque petit carreau dans la grille. Ainsi lorsque la pièce va vers la droite on ajoute à la position initiale de la pièce +25 donc logiquement la pièce se dirige vers la droite on fera l’inverse pour la direction gauche, et pour la direction bas on rajoute en \emph{y} +25 du coup la pièce va descendre d’un cran ainsi pour les directions gauche et droite on ne rajoute rien en \emph{y}, on met donc 0.
+\begin{lstlisting}[frame=single]
+self.m_PieceCourante.bouger(-TAILLE_BOITE, 0, self.m_GRILLE)
+\end{lstlisting}
+
+
+		\subsubsection{Configuration des touches de jeu}
+C'est dans la fonction {\color{orange}entreeDonnees} que nous avons attribué les touches qui seront utilisées dans le jeu pour certains évènements. D'abord on lance une boucle {\color{red}for}, qui parcourt tous les événements reçus grâce à la fonction {\color{green}get()} du module \emph{"event"} de la bibliothèque Pygame. Cette fonction retourne une liste d'objets Event, pour lesquels on peut connaître le type, la touche enfoncée si c'est au clavier, la position du curseur si c'est un clic. On teste si l'évènement est de type \emph{QUIT}; et si la condition est satisfaite, on demande à la boucle de s'arrêter.
+\begin{lstlisting}[frame=single]
+for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+        self.m_gameOver = True
+\end{lstlisting}
+
+Puis on vérifie si le type d'évènement crée correspond à l'appuie sur une touche :
+\begin{lstlisting}[frame=single]
+if event.type == pygame.KEYDOWN:
+\end{lstlisting}
+
+Ensuite on attribue des touches à chaque direction en fonction des clés données dans le dictionnaire des directions (self.m{\_}direction)
+\begin{lstlisting}[frame=single]
+if event.key == pygame.K_LEFT:
+    self.m_direction['left'] = True
+elif event.key == pygame.K_RIGHT:
+    self.m_direction['right'] = True
+elif event.key == pygame.K_DOWN:
+    self.m_direction['down'] = True
+elif event.key == pygame.K_RCTRL:
+    self.m_rotate = True
+elif event.key == pygame.K_ESCAPE:
+    self.m_gameOver = True
+\end{lstlisting}
+
+Après cela on vérifie le relâchement des touches c’est-à-dire si les touches appuyées sont relâchées la pièce continue à chuter sans aller à gauche où à droite mais continue de tomber a vitesse normale pour cela on redonne comme valeur au clé du dictionnaire correspondant aux directions gauche droite ou basse la valeur booléenne fausse :
+\begin{lstlisting}[frame=single]
+if event.key == pygame.K_LEFT:
+    self.m_direction['left'] = True
+elif event.key == pygame.K_RIGHT:
+    self.m_direction['right'] = True
+elif event.key == pygame.K_DOWN:
+    self.m_direction['down'] = True
+elif event.key == pygame.K_RCTRL:
+    self.m_rotate = True
+elif event.key == pygame.K_ESCAPE:
+    self.m_gameOver = True
+\end{lstlisting}
+
+En résumé  lorsque le joueur appuie sur la touche « direction gauche » du clavier par exemple, la clé correspondant à cette direction est égale à {\color{yellow}True} et ainsi la pièce va se déplacer d’un cran vers la gauche il en est ainsi des autres cas.
+
+
+		\subsubsection{Mise à jour des pièces}
+Cette fonction à pour but de faire tourner le jeu cette fonction est la plaque tournante du jeu entier.\\ Pour débuter nous avons initialisé la variable \emph{self.m{\_}dernierrechutetime} cette variable correspond au dernier temps de chute; on régule l’exécution des instructions de façon a ce qu’elle soit supérieure à 1.
+\begin{lstlisting}[frame=single]
+if time.time() - self.m_DernierrechuteTime > 1:
+\end{lstlisting}
+
+Puis on définit la variable \emph{self.m{\_}piecechutes} en disant qu’au moment où la pièce est en chute, elle descend de façon continuelle sans que l’on ait besoin d’appuyer une touche.
+\begin{lstlisting}[frame=single]
+if self.m_piecechutes:
+    if self.m_PieceCourante.bouger(0, TAILLE_BOITE, self.m_GRILLE):
+        pass
+\end{lstlisting}
+
+Dans le cas contraire on donne comme valeur à cette variable la valeur booléenne {\color{yellow}False}, qui signifie qu'aucune pièce n’est en chute alors on ajoute à la grille une nouvelle pièce ensuite on ajoute 25 au score pour chaque ligne effacée en multipliant chaque ligne complète par 25. En fin de cette condition on réinitialise \emph{self m{\_}Dernierrechutetime} à {\color{purple}time.time()} on fait ceci car si on ne le fait pas, les pièces tomberont sans cesse rendant impossible le jeu; cette réinitialisation assure donc une régulation de la chute et la vitesse de chute des pièces. Ensuite si aucune pièce n’est en chute la pièce courante est égale à la pièce suivante et elle-même la pièce suivante est égale à la future pièce courante et ainsi on la fait descendre tout au milieu de la grille. Dans ce cas l’état de chutes de la pièce devient vrai donc on réaffecte à la variable \emph{self.m{\_}piecechutes} la valeur booléenne {\color{yellow}True} sinon la chute des pièces sera incontrôlée. Enfin si la descente n’est plus possible dans la grille le jeu se termine donc on attribue ainsi à la variable \emph{gameover} la valeur {\color{yellow}True}. En résumé la fonction mise à jour régule le passage de la pièce suivante à la grille et l’intervalle de mise à jour des éléments dans la grille, dans le cas où l’on réduit le temps de mise à jour les itérations s'exécutent plus rapidement, quant au joueur il aura constaté que la chute des pièces s'accélère car le temps entre chaque itération a baissé. 
+
+	\subsection*{Fonctions supplémentaires}
+		\subsubsection*{Niveaux}
+Dans cette fonction nous modifions juste l’ambiance et nous rajoutons a la liste de pièces des nouvelles formes assez difficile à jouer et le niveau change en fonction du score de l’utilisateur.
+
+		\subsubsection*{Changement d’ambiance}
+Dans cette fonction nous réutilisons juste la fonction mise a jour en diminuant la fréquence des mise a jour ce qui va accélérer la chute des pièces dans la grille selon le niveau atteint. \\ \\
+
+Concernant l’affichage et l’aspect graphique du jeu nous avons tout d’abord à l’aide des fonctions écrites antérieurement dans les classes grille et pièce, dessiné les pièces sur le plateau notamment grace à {\color{orange}dessinergrille} qui dessine les pièces dans la grille créée sur les plateaux puis avec la fonction {\color{orange}dessinerpiece} on dessine pièce suivante. Ensuite on a dessiné les contours de la grille avec la méthode {\color{violet}pygame.draw.line} de pygame et ensuite on blit la grille sur la fenêtre.
+
+
+	\subsection{Description de la classe Multijoueur}
+Tout comme la classe Solo la classe multijoueur est aussi une classe majeure de notre jeu, car comme son nom l'indique c'est dans cette classe qu'à été créée deux grilles indépendantes et donc c'est dans cette classe que nous avons mis en place notre Tetris multijoueur.
+
+		\subsubsection{Mise en place des grilles}
+Tout d’abord nous avons initialisé dans la classe multijoueur la grille en lui donnant tous les attributs de la classe grille \emph{self.m{\_}grille2 = GRILLE()}. Puis on crée deux plateaux ayant comme dimensions, celle de la grille c’est sur ces plateaux que seront dessinées les deux grilles. Ensuite nous avons dupliqué tous les éléments utiles et permettant l’indépendance des deux grilles telle que les \emph{pièces courantes, les pièces suivantes, l’état des pièces, le game{\_}over, le sens de déplacement, les touches du clavier, les rotations de pièces} et enfin \emph{les deux différents plateaux de jeu} car c’est ceci qui nous permet de distinguer bien les deux grilles. \\ 
+Puis après nous avons dupliqué la classe pièce avant de modifier la variable position qui modifiera la position des éléments dans la boîte telle que l’affichage de la pièce suivante de la seconde grille. Après ceci nous avons modifié les touches directions pour chaque grille en dupliquant la fonction {\color{orange}logic}; après cela il ne nous restait qu’à afficher les deux grilles sur les plateaux de jeu initialisés en début de classe. \\ 
+Dans la fonction dédiée à l’affichage et à l’aspect graphique du jeu nous avons tout d’abord à l’aide des fonctions écrites antérieurement dans les classes grille et pièce, dessiné les pièces  sur les plateaux notamment grâce à {\color{orange}dessinergrille} qui dessine les pièces dans la grille créé sur les plateaux, puis avec {\color{orange}dessinerpiece} on dessine la pièce suivante. Comme dans la classe Solo, les contours de la grille on été réalisé avec la méthode {\color{violet}pygame.draw.line} de pygame et ensuite on a blité la grille sur les deux plateaux à des coordonnées différentes;  après ceci on constate que les deux grilles sont bien présentes dans la fenêtre de façon bien distingué  il restera ensuite a mettre un peu d’action dans le jeu.
+
+		\subsubsection{Mode confrontation}
+Notre mode multijoueur test le plus endurant des deux joueurs. En cassant des lignes des formes de pièces difficile a placer sont ajoutées au dictionnaire de pièce du joueurs adverse et ainsi de suite le joueur ayant cassé le plus de lignes c'est-à-dire ayant le plus grand score remporte la partie. Lorsque que l’un des deux joueurs perd avant son adversaire c’est-à-dire que sa grille est pleine il est impossible pour lui de continuer ainsi dans sa grille il n'y a plus d'évènement (chute de pièces) et l’adversaire peut tranquillement terminer sa partie ainsi le joueur ayant le plus grand score et ayant le plus duré dans la partie remporte celle-ci.
+
+
+	\subsection{Organisation du travail}
+Concernant l'organisation du travail, nous nous ne nous sommes pas vraiment réparti les taches pour concevoir le Tetris. Nous avons réaliser en grande partie ce projet en groupe, lors de nos séances de travaux pratiques mais aussi en dehors de ces séances afin de permettre à chacun d'entre nous de mieux comprendre le code et le fonctionnement du jeu.
+
+
+\section{Éléments techniques}
+	\subsection{Bibliothèque Pygame}
+		\begin{center}
+		  \includegraphics[width=4cm]{images/pygame_logo.png}
+		\end{center}
+Pygame est une bibliothèque Python permettant la réalisation simple de jeux interactif. Cette bibliothèque est principalement basée sur la \emph{SDL (Simple Directmedia Library)} qui est une bibliothèque libre multi-plateforme permettant la gestion du multimédia dans la programmation. \\ 
+En résumé, cette bibliothèque sert principalement pour:
+\begin{itemize}
+	\item L'{\color{purple}affichage vidéo 2D}
+	\item La {\color{purple}gestion de l'audio}
+	\item La gestion de {\color{purple}périphériques de commandes} tel que le clavier, la souris
+\end{itemize}
+
+Pygame est donc l'adaptation de la SDL au service de Python, mais est aussi constitué de quelques ajouts et modifications de son auteur. Cette  bibliothèque  est  assez  intuitive  et  constitue  un  très  bon moyen  de  se  lancer  dans  la  programmation graphique avec Python. 
+
+			\subsubsection{Importation de la bibliothèque}
+Elle assez simple à installer et importer (\hl{import pygame}); avant toute chose, cette bibliothèque nécessite d’être initialisée l’instruction \hl{Pygame.init()}. 
+
+			\subsubsection{Ouverture d'une fenêtre}
+L'ouverture d’une fenêtre se fait avec la fonction \emph{set{\_}mode()} contenue dans le module "display" de Pygame. Cette fonction prend en paramètre un tuple contenant la largeur et la hauteur de la fenêtre voulue.
+\begin{center}
+ \colorbox{cyan}{pygame.display.set{\_}mode((Width, Height))}
+\end{center}
+
+			\subsubsection{Chargement et collage d'une image dans une fenêtre}
+Pour pré-charger des images dans notre fenêtre, on utilise la fonction \emph{load()} du module "image"
+\begin{center}
+ \colorbox{cyan}{pygame.image.load("nom{\_}image").convert()}
+\end{center}
+
+C'est avec la fonction \emph{blit()} qu'on effectue le collage dans une fenêtre. Elle prend en argument l’image pré-chargée que l’on souhaite coller, et les positions sous forme de tuple de l’endroit où on souhaite afficher notre image. Les coordonnées sont celles de l’angle en haut à gauche de l’image.
+\begin{center}
+ \colorbox{cyan}{Surface.blit(fond, (0,0))}
+\end{center}
+
+À noter que l'affichage de l'image collée n'est fait qu'après avoir actualisé, rafraîchi la surface à l'aide de la fonction \emph{flip} ou \emph{update} du module "display" de pygame.
+
+		\subsubsection{Gestion des évènements}
+	\paragraph{Les touches du clavier}
+Pygame est une librairie qui fonctionne avec des évènements. Un événement est simplement une action que l’utilisateur effectuera, par exemple cela peut être « Appuyez sur la touche V » ou  encore  « Bouger la souris ». Pour  cela,  Pygame  enregistre  dans  une  liste  tous  les  nouveaux  évènements lorsqu’il y en a un et de manière asynchrone. Ces évènements sont  alors  enregistrés et récupérés avec la fonction \emph{get()} du module "event" de pygame. 
+\begin{center}
+ \colorbox{cyan}{pygame.event.get()}
+\end{center}
+
+La détection de l'appuie sur une touche se fait avec le mot clé \textcolor{brown}{KEYDOWN} et la détection sur le relâchement d'une touche se fait \textcolor{brown}{KEYUP}.
+
+
+	\paragraph{Les évènements liés à la souris}
+Le type d'événement crée lors d'un clic est \textcolor{brown}{MOUSEBUTTONDOWN}, (ou \textcolor{brown}{MOUSEBUTTONUP} au relâchement du bouton). Un événement de souris possède deux attributs : le bouton (\textcolor{blue}{event.button}) et la position du clic dans la fenêtre (\textcolor{blue}{event.pos}). \\
+\emph{event.button} peut prendre les valeurs suivantes :
+\begin{enumerate}
+	\item Bouton gauche
+	\item Bouton milieu (ou droite + gauche)
+	\item Bouton droit
+	\item Molette haut
+	\item Molette bas
+\end{enumerate}
+
+\emph{event.pos} renvoie  un  tuple  contenant  l'abscisse  et  l'ordonnée  à partir de l'angle haut-gauche, c’est-à-dire le bout de la pointe de la flèche.
+
+
+\section{Architecture du projet}
+   \subsection{Diagrammes des modules et des classes}
+   		\begin{center}
+   			\includegraphics[width=11.5cm]{images/war_quest(1).png}
+   		\end{center}
+À travers ce graphique on peut donc voir les relations entre nos classes et leurs fonctions. En effet, les classes \textcolor{cyan}{PIECE} et \textcolor{cyan}{GRILLE} sont toutes reliées à la classe \textcolor{cyan}{GRILLE} car c'est dans la grille que nos pièces sont dessinées et que certaines actions (déplacement, rotation, accélération de chute de pièces) y sont effectuées. D'où une interdépendance de certaines fonctions des classes pour le bon fonctionnement du jeu.
+
+\section{Expérimentations et usages}
+   \subsection{Captures d’écrans}
+   
+\section{Conclusion}
+   \subsection{Récapitulatif des fonctionnalités principales}
+Au terme de ce projet, nous pouvons rappeler que les classes \textbf{Grille}, \textbf{Pieces} et \textbf{Solo} ont regroupé les principales fonctionnalités de notre jeu. Dans la classe Grille a été initialisée la grille de jeu, les pièces ont été ajoutées et dessinées, les fonctions de test de lignes complètes et d'effacement de ligne ont été implémentées. \\ 
+Dans la classe Pieces les pièces suivantes ont été dessinées, déplacées (via la fonction \textcolor{orange}{bouger}), que la fonction de rotation a été implémenté et que le test sur la possibilité de descente d'une pièce a été effectuée. Et dans la classe Solo, les touches de jeu ont été configuré et que l'interface a été géré. \\
+Toutefois comme dans tous les projets certaines difficultés ont été rencontré lors de la conception du jeu notamment pour faire un multijoueur local. Mais à force de persévérer à pouvoir le faire nous avons fini par réussir.  
+
+   
+   \subsection{Propositions d’améliorations}
+Pour rendre notre jeu un peu plus performant, certaines améliorations peuvent être apportée ou proposée comme :
+\begin{itemize}[font=\color{magenta} \Large, label=\ding{224}]
+	\item La mise en place d'une pièce fantôme au niveau du fond de la grille c'est-à-dire une pièce qui reflétera au fond de la grille la position dans laquelle notre pièce va se poser;
+	\item La mise en place d'un système de stockage de pièce, qui permettra au joueur de pouvoir changer de pièce courante quand ça ne lui arrange pas;
+	\item Implémenter une intelligence artificielle (IA) locale et en réseau. 
+\end{itemize} 
+
+
+\end{document}
